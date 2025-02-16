@@ -23,13 +23,8 @@ public class UserService : IUserService
     {
         var user = await _merchStoreRepository.GetUserByName(username);
         var inventory = await _merchStoreRepository.GetUserInventory(username);
-        var transactionHistory = await _merchStoreRepository.GetTransactionsHistory(username);
-
-        var a = transactionHistory.Where(t => t.SenderName == username).Select(x => new SentCoins
-            {
-                Amount = x.Amount,
-                ToUserName = x.ReceiverName
-            }).ToList();
+        var transactionHistory = await _merchStoreRepository.GetTransactionsHistory();
+        
         var coinHistory = new CoinHistory
         {
             SentCoins = transactionHistory.Where(t => t.SenderName == username).Select(x => new SentCoins

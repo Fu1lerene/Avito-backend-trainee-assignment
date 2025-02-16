@@ -60,7 +60,7 @@ public class UserServiceTests
         
         _repositoryMock.Setup(x => x.GetUserByName(user.Username)).ReturnsAsync(user);
         _repositoryMock.Setup(x => x.GetUserInventory(user.Username)).ReturnsAsync(inventory);
-        _repositoryMock.Setup(x => x.GetTransactionsHistory(user.Username)).ReturnsAsync(transactionHistory);
+        _repositoryMock.Setup(x => x.GetTransactionsHistory()).ReturnsAsync(transactionHistory);
 
         var response = await _userService.GetInfo(user.Username);
 

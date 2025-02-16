@@ -10,5 +10,5 @@ public interface IMerchStoreRepository
     Task SendCoins(User senderUser, User receiverUser, int amount);
     Task BuyItem(User user, MerchItem item, int quantity);
     Task<IReadOnlyCollection<UserInventory>> GetUserInventory(string username);
-    Task<IReadOnlyCollection<Transaction>> GetTransactionsHistory(string username);
+    Task<IReadOnlyCollection<Transaction>> GetTransactionsHistory();
 }

@@ -71,7 +71,7 @@ public class MerchStoreRepository : IMerchStoreRepository
         return user.Inventory;
     }
     
-    public async Task<IReadOnlyCollection<Transaction>> GetTransactionsHistory(string username)
+    public async Task<IReadOnlyCollection<Transaction>> GetTransactionsHistory()
     {
         return await _context.Transactions
             .OrderByDescending(t => t.Timestamp)

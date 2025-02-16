@@ -27,7 +27,6 @@ public class Startup
 
         services.AddDbContext<MerchDbContext>(options => 
             options.UseNpgsql(_configuration.GetConnectionString("DefaultConnection")));
-        // services.AddDbContext<MerchDbContext>();
             
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICoinService, CoinService>();
