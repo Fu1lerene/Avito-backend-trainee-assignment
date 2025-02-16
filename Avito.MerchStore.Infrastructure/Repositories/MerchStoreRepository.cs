@@ -1,4 +1,5 @@
-﻿using Avito.MerchStore.Domain.Repositories;
+﻿using System.Data;
+using Avito.MerchStore.Domain.Repositories;
 using Avito.MerchStore.Domain.Repositories.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,21 +34,31 @@ public class MerchStoreRepository : IMerchStoreRepository
     
     public async Task SendCoins(User senderUser, User receiverUser, int amount)
     {
-        senderUser.Balance -= amount;
-        receiverUser.Balance += amount;
-        
-        _context.Users.Update(senderUser);
-        _context.Users.Update(receiverUser);
-
-        _context.Transactions.Add(new Transaction
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            SenderName = senderUser.Username,
-            ReceiverName = receiverUser.Username,
-            Amount = amount,
-            Timestamp = DateTime.UtcNow
-        });
-        
-        await _context.SaveChangesAsync();
+            senderUser.Balance -= amount;
+            receiverUser.Balance += amount;
+
+            _context.Users.Update(senderUser);
+            _context.Users.Update(receiverUser);
+
+            _context.Transactions.Add(new Transaction
+            {
+                SenderName = senderUser.Username,
+                ReceiverName = receiverUser.Username,
+                Amount = amount,
+                Timestamp = DateTime.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
     
     public async Task<IReadOnlyCollection<UserInventory>> GetUserInventory(string username)

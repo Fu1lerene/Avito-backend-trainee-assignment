@@ -1,7 +1,12 @@
-﻿namespace Avito.MerchStore.Domain.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Avito.MerchStore.Domain.Models;
 
 public class CoinHistory
 {
-    public IReadOnlyCollection<ReceivedCoins>? ReceivedCoins { get; set; } = null;
-    public IReadOnlyCollection<SentCoins>? SentCoins { get; set; } = null;
+    [JsonPropertyName("receivedCoins")]
+    public IReadOnlyCollection<ReceivedCoins>? ReceivedCoins { get; set; }
+    
+    [JsonPropertyName("sentCoins")]
+    public IReadOnlyCollection<SentCoins>? SentCoins { get; set; }
 }
